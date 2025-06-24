@@ -110,6 +110,16 @@ def create_section(parent, title, list_, col, is_station=False):
         dropdown.config(width=18)
         dropdown.grid(row=3, column=col+1, sticky=W, pady=2)
 
+        def update_dropdown():
+            dropdown['menu'].delete(0, 'end')
+            for s in stations:
+                dropdown['menu'].add_command(label=s.name, command=lambda value=s.name: var_loc.set(value))
+        update_dropdown_funcs.append(update_dropdown)
+
+    def refresh_add():
+        add_entity(list_, e_name, e_loc, lambda: show_entities(list_, listbox), is_station)
+        for f in update_dropdown_funcs:
+            f()
 
 
 
