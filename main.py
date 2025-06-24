@@ -135,7 +135,4 @@ def create_section(parent, title, list_, col, is_station=False):
 
     return listbox
 
-
-
-
 root.mainloop()
