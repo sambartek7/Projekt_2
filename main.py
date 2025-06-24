@@ -135,4 +135,18 @@ def create_section(parent, title, list_, col, is_station=False):
 
     return listbox
 
+# -------------------------------
+# Ramki i kolejność sekcji
+# -------------------------------
+frame_top = Frame(root)
+frame_top.grid(row=1, column=0, columnspan=3, pady=10)
+
+update_dropdown_funcs = []
+
+lb_st = create_section(frame_top, "Stacje", stations, 0, is_station=True)
+lb_emp = create_section(frame_top, "Pracownicy", employees, 2)
+lb_cl = create_section(frame_top, "Klienci", clients, 4)
+
+
+
 root.mainloop()
