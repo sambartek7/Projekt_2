@@ -121,6 +121,21 @@ def create_section(parent, title, list_, col, is_station=False):
         for f in update_dropdown_funcs:
             f()
 
+    btn_add = Button(parent, text="Dodaj", width=12, command=refresh_add)
+    btn_add.grid(row=4, column=col, pady=2)
+
+    btn_edit = Button(parent, text="Edytuj", width=12,
+                      command=lambda: edit_entity(list_, listbox, e_name, e_loc, btn_add,
+                                                  lambda: show_entities(list_, listbox), is_station))
+    btn_edit.grid(row=4, column=col+1, pady=2)
+
+    btn_del = Button(parent, text="Usuń", width=26,
+                     command=lambda: remove_entity(list_, listbox, lambda: show_entities(list_, listbox)))
+    btn_del.grid(row=5, column=col, columnspan=2, pady=2)
+
+    return listbox
+
+
 
 
 root.mainloop()
