@@ -1,0 +1,91 @@
+from tkinter import *
+import tkintermapview
+import requests
+from bs4 import BeautifulSoup
+
+root = Tk()
+root.title('System mapowy — Stacje, Pracownicy, Klienci')
+root.geometry('1200x800')
+
+# -------------------------------
+# Mapa
+# -------------------------------
+map_widget = tkintermapview.TkinterMapView(root, width=1150, height=400)
+map_widget.grid(row=2, column=0, columnspan=3, padx=10, pady=10)
+map_widget.set_position(52.23, 21.00)
+map_widget.set_zoom(6)
+
+# -------------------------------
+# Klasa i dane
+# -------------------------------
+class MapEntity:
+    def __init__(self, name, location):
+        self.name = name
+        self.location = location
+        self.coordinates = self.get_coordinates()
+        self.marker = map_widget.set_marker(self.coordinates[0], self.coordinates[1], text=self.name)
+
+    def get_coordinates(self):
+        url = f'https://pl.wikipedia.org/wiki/{self.location}'
+        r = requests.get(url).text
+        html = BeautifulSoup(r, 'html.parser')
+        lat = float(html.select('.latitude')[1].text.replace(',', '.'))
+        lon = float(html.select('.longitude')[1].text.replace(',', '.'))
+        return [lat, lon]
+
+stations, employees, clients = [], [], []
+
+# -------------------------------
+# Funkcje
+# -------------------------------
+def add_entity(list_, entry_name, location_input, show_fn, is_entry=True):
+    name = entry_name.get().strip()
+    location = location_input.get().strip() if is_entry else get_location_from_station_name(location_input.get())
+    if not name or not location:
+        return
+    list_.append(MapEntity(name, location))
+    entry_name.delete(0, END)
+    location_input.set('') if not is_entry else location_input.delete(0, END)
+    show_fn()
+
+def get_location_from_station_name(station_name):
+    station = next((s for s in stations if s.name == station_name), None)
+    return station.location if station else ''
+
+def remove_entity(list_, listbox, show_fn):
+    i = listbox.index(ACTIVE)
+    list_[i].marker.delete()
+    list_.pop(i)
+    show_fn()
+
+def edit_entity(list_, listbox, entry_name, location_input, button_edit, show_fn, is_entry=True):
+    i = listbox.index(ACTIVE)
+    entry_name.delete(0, END)
+    entry_name.insert(0, list_[i].name)
+    value = list_[i].location if is_entry else list_[i].name
+    location_input.set(value) if not is_entry else location_input.insert(0, value)
+    button_edit.config(text="Zapisz", command=lambda: update_entity(list_, i, entry_name, location_input, button_edit, show_fn, is_entry))
+
+def update_entity(list_, i, entry_name, location_input, button_edit, show_fn, is_entry=True):
+    list_[i].marker.delete()
+    name = entry_name.get().strip()
+    location = location_input.get().strip() if is_entry else get_location_from_station_name(location_input.get())
+    if not name or not location:
+        return
+    list_[i].name = name
+    list_[i].location = location
+    list_[i].coordinates = list_[i].get_coordinates()
+    list_[i].marker = map_widget.set_marker(*list_[i].coordinates, text=list_[i].name)
+    entry_name.delete(0, END)
+    location_input.set('') if not is_entry else location_input.delete(0, END)
+    button_edit.config(text="Dodaj", command=lambda: add_entity(list_, entry_name, location_input, show_fn, is_entry))
+    show_fn()
+
+
+def show_entities(list_, listbox):
+    listbox.delete(0, END)
+    for idx, ent in enumerate(list_):
+        listbox.insert(idx, f"{idx + 1}. {ent.name} — {ent.location}")
+
+
+root.mainloop()
