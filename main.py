@@ -58,4 +58,18 @@ def remove_entity(list_, listbox, show_fn):
     list_.pop(i)
     show_fn()
 
+def edit_entity(list_, listbox, entry_name, location_input, button_edit, show_fn, is_entry=True):
+    i = listbox.index(ACTIVE)
+    entry_name.delete(0, END)
+    entry_name.insert(0, list_[i].name)
+    value = list_[i].location if is_entry else list_[i].name
+    location_input.set(value) if not is_entry else location_input.insert(0, value)
+    button_edit.config(text="Zapisz", command=lambda: update_entity(list_, i, entry_name, location_input, button_edit, show_fn, is_entry))
+
+def update_entity(list_, i, entry_name, location_input, button_edit, show_fn, is_entry=True):
+    list_[i].marker.delete()
+    name = entry_name.get().strip()
+    location = location_input.get().strip() if is_entry else get_location_from_station_name(location_input.get())
+    if not name or not location:
+
 root.mainloop()
