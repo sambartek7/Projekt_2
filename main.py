@@ -71,5 +71,21 @@ def update_entity(list_, i, entry_name, location_input, button_edit, show_fn, is
     name = entry_name.get().strip()
     location = location_input.get().strip() if is_entry else get_location_from_station_name(location_input.get())
     if not name or not location:
+        return
+    list_[i].name = name
+    list_[i].location = location
+    list_[i].coordinates = list_[i].get_coordinates()
+    list_[i].marker = map_widget.set_marker(*list_[i].coordinates, text=list_[i].name)
+    entry_name.delete(0, END)
+    location_input.set('') if not is_entry else location_input.delete(0, END)
+    button_edit.config(text="Dodaj", command=lambda: add_entity(list_, entry_name, location_input, show_fn, is_entry))
+    show_fn()
+
+
+def show_entities(list_, listbox):
+    listbox.delete(0, END)
+    for idx, ent in enumerate(list_):
+        listbox.insert(idx, f"{idx + 1}. {ent.name} — {ent.location}")
+
 
 root.mainloop()
