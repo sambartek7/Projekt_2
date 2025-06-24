@@ -147,6 +147,13 @@ lb_st = create_section(frame_top, "Stacje", stations, 0, is_station=True)
 lb_emp = create_section(frame_top, "Pracownicy", employees, 2)
 lb_cl = create_section(frame_top, "Klienci", clients, 4)
 
+# -------------------------------
+# Panel z filtrowaniem mapy
+# -------------------------------
+frame_controls = Frame(root)
+frame_controls.grid(row=1, column=3, padx=10, sticky=N)
+
+Label(frame_controls, text="Widok mapy:", font=("Arial", 12, "bold")).pack(pady=(0, 10))
 
 
 root.mainloop()
