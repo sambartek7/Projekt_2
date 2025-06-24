@@ -52,5 +52,10 @@ def get_location_from_station_name(station_name):
     station = next((s for s in stations if s.name == station_name), None)
     return station.location if station else ''
 
+def remove_entity(list_, listbox, show_fn):
+    i = listbox.index(ACTIVE)
+    list_[i].marker.delete()
+    list_.pop(i)
+    show_fn()
 
 root.mainloop()
