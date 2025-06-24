@@ -96,6 +96,21 @@ def create_section(parent, title, list_, col, is_station=False):
     listbox = Listbox(parent, width=35, height=8)
     listbox.grid(row=1, column=col, columnspan=2, padx=10)
 
+    Label(parent, text="Nazwa:").grid(row=2, column=col, sticky=E)
+    e_name = Entry(parent, width=20); e_name.grid(row=2, column=col+1, sticky=W, pady=2)
+
+    if is_station:
+        Label(parent, text="Lokalizacja:").grid(row=3, column=col, sticky=E)
+        e_loc = Entry(parent, width=20); e_loc.grid(row=3, column=col+1, sticky=W, pady=2)
+    else:
+        Label(parent, text="Stacja:").grid(row=3, column=col, sticky=E)
+        var_loc = StringVar()
+        e_loc = var_loc
+        dropdown = OptionMenu(parent, var_loc, '')
+        dropdown.config(width=18)
+        dropdown.grid(row=3, column=col+1, sticky=W, pady=2)
+
+
 
 
 root.mainloop()
