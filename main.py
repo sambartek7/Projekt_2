@@ -87,5 +87,66 @@ def show_entities(list_, listbox):
     for idx, ent in enumerate(list_):
         listbox.insert(idx, f"{idx + 1}. {ent.name} — {ent.location}")
 
+# -------------------------------
+# GUI sekcja
+# -------------------------------
+def create_section(parent, title, list_, col, is_station=False):
+    Label(parent, text=title, font=("Arial", 12, "bold")).grid(row=0, column=col, columnspan=2, pady=(5, 0))
+
+    listbox = Listbox(parent, width=35, height=8)
+    listbox.grid(row=1, column=col, columnspan=2, padx=10)
+
+    Label(parent, text="Nazwa:").grid(row=2, column=col, sticky=E)
+    e_name = Entry(parent, width=20); e_name.grid(row=2, column=col+1, sticky=W, pady=2)
+
+    if is_station:
+        Label(parent, text="Lokalizacja:").grid(row=3, column=col, sticky=E)
+        e_loc = Entry(parent, width=20); e_loc.grid(row=3, column=col+1, sticky=W, pady=2)
+    else:
+        Label(parent, text="Stacja:").grid(row=3, column=col, sticky=E)
+        var_loc = StringVar()
+        e_loc = var_loc
+        dropdown = OptionMenu(parent, var_loc, '')
+        dropdown.config(width=18)
+        dropdown.grid(row=3, column=col+1, sticky=W, pady=2)
+
+        def update_dropdown():
+            dropdown['menu'].delete(0, 'end')
+            for s in stations:
+                dropdown['menu'].add_command(label=s.name, command=lambda value=s.name: var_loc.set(value))
+        update_dropdown_funcs.append(update_dropdown)
+
+    def refresh_add():
+        add_entity(list_, e_name, e_loc, lambda: show_entities(list_, listbox), is_station)
+        for f in update_dropdown_funcs:
+            f()
+
+    btn_add = Button(parent, text="Dodaj", width=12, command=refresh_add)
+    btn_add.grid(row=4, column=col, pady=2)
+
+    btn_edit = Button(parent, text="Edytuj", width=12,
+                      command=lambda: edit_entity(list_, listbox, e_name, e_loc, btn_add,
+                                                  lambda: show_entities(list_, listbox), is_station))
+    btn_edit.grid(row=4, column=col+1, pady=2)
+
+    btn_del = Button(parent, text="Usuń", width=26,
+                     command=lambda: remove_entity(list_, listbox, lambda: show_entities(list_, listbox)))
+    btn_del.grid(row=5, column=col, columnspan=2, pady=2)
+
+    return listbox
+
+# -------------------------------
+# Ramki i kolejność sekcji
+# -------------------------------
+frame_top = Frame(root)
+frame_top.grid(row=1, column=0, columnspan=3, pady=10)
+
+update_dropdown_funcs = []
+
+lb_st = create_section(frame_top, "Stacje", stations, 0, is_station=True)
+lb_emp = create_section(frame_top, "Pracownicy", employees, 2)
+lb_cl = create_section(frame_top, "Klienci", clients, 4)
+
+
 
 root.mainloop()
