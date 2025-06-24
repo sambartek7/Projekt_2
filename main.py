@@ -35,4 +35,19 @@ class MapEntity:
 
 stations, employees, clients = [], [], []
 
+# -------------------------------
+# Funkcje
+# -------------------------------
+def add_entity(list_, entry_name, location_input, show_fn, is_entry=True):
+    name = entry_name.get().strip()
+    location = location_input.get().strip() if is_entry else get_location_from_station_name(location_input.get())
+    if not name or not location:
+        return
+    list_.append(MapEntity(name, location))
+    entry_name.delete(0, END)
+    location_input.set('') if not is_entry else location_input.delete(0, END)
+    show_fn()
+
+
+
 root.mainloop()
