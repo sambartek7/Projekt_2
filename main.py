@@ -164,5 +164,4 @@ Button(frame_controls, text="Pokaż stacje", width=18, command=lambda: show_only
 Button(frame_controls, text="Pokaż pracowników", width=18, command=lambda: show_only(employees)).pack(pady=5)
 Button(frame_controls, text="Pokaż klientów", width=18, command=lambda: show_only(clients)).pack(pady=5)
 
-
 root.mainloop()
