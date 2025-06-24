@@ -87,5 +87,15 @@ def show_entities(list_, listbox):
     for idx, ent in enumerate(list_):
         listbox.insert(idx, f"{idx + 1}. {ent.name} — {ent.location}")
 
+# -------------------------------
+# GUI sekcja
+# -------------------------------
+def create_section(parent, title, list_, col, is_station=False):
+    Label(parent, text=title, font=("Arial", 12, "bold")).grid(row=0, column=col, columnspan=2, pady=(5, 0))
+
+    listbox = Listbox(parent, width=35, height=8)
+    listbox.grid(row=1, column=col, columnspan=2, padx=10)
+
+
 
 root.mainloop()
