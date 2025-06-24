@@ -147,6 +147,21 @@ lb_st = create_section(frame_top, "Stacje", stations, 0, is_station=True)
 lb_emp = create_section(frame_top, "Pracownicy", employees, 2)
 lb_cl = create_section(frame_top, "Klienci", clients, 4)
 
+# -------------------------------
+# Panel z filtrowaniem mapy
+# -------------------------------
+frame_controls = Frame(root)
+frame_controls.grid(row=1, column=3, padx=10, sticky=N)
 
+Label(frame_controls, text="Widok mapy:", font=("Arial", 12, "bold")).pack(pady=(0, 10))
+
+def show_only(list_):
+    map_widget.delete_all_marker()
+    for ent in list_:
+        ent.marker = map_widget.set_marker(ent.coordinates[0], ent.coordinates[1], text=ent.name)
+
+Button(frame_controls, text="Pokaż stacje", width=18, command=lambda: show_only(stations)).pack(pady=5)
+Button(frame_controls, text="Pokaż pracowników", width=18, command=lambda: show_only(employees)).pack(pady=5)
+Button(frame_controls, text="Pokaż klientów", width=18, command=lambda: show_only(clients)).pack(pady=5)
 
 root.mainloop()
