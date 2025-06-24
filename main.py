@@ -160,5 +160,9 @@ def show_only(list_):
     for ent in list_:
         ent.marker = map_widget.set_marker(ent.coordinates[0], ent.coordinates[1], text=ent.name)
 
+Button(frame_controls, text="Pokaż stacje", width=18, command=lambda: show_only(stations)).pack(pady=5)
+Button(frame_controls, text="Pokaż pracowników", width=18, command=lambda: show_only(employees)).pack(pady=5)
+Button(frame_controls, text="Pokaż klientów", width=18, command=lambda: show_only(clients)).pack(pady=5)
+
 
 root.mainloop()
