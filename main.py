@@ -155,5 +155,10 @@ frame_controls.grid(row=1, column=3, padx=10, sticky=N)
 
 Label(frame_controls, text="Widok mapy:", font=("Arial", 12, "bold")).pack(pady=(0, 10))
 
+def show_only(list_):
+    map_widget.delete_all_marker()
+    for ent in list_:
+        ent.marker = map_widget.set_marker(ent.coordinates[0], ent.coordinates[1], text=ent.name)
+
 
 root.mainloop()
