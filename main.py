@@ -48,6 +48,9 @@ def add_entity(list_, entry_name, location_input, show_fn, is_entry=True):
     location_input.set('') if not is_entry else location_input.delete(0, END)
     show_fn()
 
+def get_location_from_station_name(station_name):
+    station = next((s for s in stations if s.name == station_name), None)
+    return station.location if station else ''
 
 
 root.mainloop()
