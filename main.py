@@ -81,7 +81,6 @@ def update_entity(list_, i, entry_name, location_input, button_edit, show_fn, is
     button_edit.config(text="Dodaj", command=lambda: add_entity(list_, entry_name, location_input, show_fn, is_entry))
     show_fn()
 
-
 def show_entities(list_, listbox):
     listbox.delete(0, END)
     for idx, ent in enumerate(list_):
@@ -163,5 +162,26 @@ def show_only(list_):
 Button(frame_controls, text="Pokaż stacje", width=18, command=lambda: show_only(stations)).pack(pady=5)
 Button(frame_controls, text="Pokaż pracowników", width=18, command=lambda: show_only(employees)).pack(pady=5)
 Button(frame_controls, text="Pokaż klientów", width=18, command=lambda: show_only(clients)).pack(pady=5)
+
+def show_employees_selected_station():
+    sel = lb_st.curselection()
+    if not sel:
+        return
+    target_loc = stations[sel[0]].location
+    map_widget.delete_all_marker()
+    for ent in (e for e in employees if e.location == target_loc):
+        ent.marker = map_widget.set_marker(ent.coordinates[0], ent.coordinates[1], text=ent.name)
+
+def show_clients_selected_station():
+    sel = lb_st.curselection()
+    if not sel:
+        return
+    target_loc = stations[sel[0]].location
+    map_widget.delete_all_marker()
+    for ent in (c for c in clients if c.location == target_loc):
+        ent.marker = map_widget.set_marker(ent.coordinates[0], ent.coordinates[1], text=ent.name)
+
+Button(frame_controls, text="Pracownicy stacji",  width=18, command=show_employees_selected_station).pack(pady=5)
+Button(frame_controls, text="Klienci stacji",     width=18, command=show_clients_selected_station).pack(pady=5)
 
 root.mainloop()
